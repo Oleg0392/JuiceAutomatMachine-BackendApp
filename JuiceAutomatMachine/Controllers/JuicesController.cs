@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using Microsoft.AspNetCore.Mvc;
 using JuiceAutomatMachine.Models;
 
 namespace JuiceAutomatMachine.Controllers
@@ -22,6 +23,14 @@ namespace JuiceAutomatMachine.Controllers
                 new Juice(7, "Пача Ибица", 40, 12, "drink8.png")
             };
             return Json(juices);
+        }
+
+        [HttpPost]
+        [Route("api/[controller]")]
+        public IActionResult Index([FromBody]Juice juice)
+        {
+            if (!ModelState.IsValid) return BadRequest();
+            return Ok(juice);
         }
     }
 }

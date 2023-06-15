@@ -12,7 +12,7 @@ namespace JuiceAutomatMachine.Controllers
             Coin[] coins = new Coin[]
             {
                 new Coin(0, 10, false),
-                new Coin(1, 5, false),
+                new Coin(1, 5, true),
                 new Coin(2, 2, false),
                 new Coin(3, 1, false)
             };
