@@ -1,6 +1,7 @@
-﻿using System;
+﻿//using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using JuiceAutomatMachine.Models;
+using Newtonsoft.Json;
 
 namespace JuiceAutomatMachine.Controllers
 {
@@ -9,7 +10,7 @@ namespace JuiceAutomatMachine.Controllers
     {
         [HttpGet]
         [Route("api/[controller]")]
-        public JsonResult Index()
+        public JsonResult Get()
         {
             Juice[] juices = new Juice[]
             {
@@ -25,12 +26,19 @@ namespace JuiceAutomatMachine.Controllers
             return Json(juices);
         }
 
+        [HttpOptions]
+        public dynamic Post()
+        {
+            return Ok();
+        }
+        
         [HttpPost]
         [Route("api/[controller]")]
-        public IActionResult Index([FromBody]Juice juice)
+        public dynamic Post([FromBody]object? model)
         {
-            if (!ModelState.IsValid) return BadRequest();
-            return Ok(juice);
+            if (model == null) return BadRequest();
+            var juices = JsonConvert.DeserializeObject<Juice[]>(model.ToString());
+            return Ok(juices);
         }
     }
 }
