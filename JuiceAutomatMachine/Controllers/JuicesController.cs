@@ -6,8 +6,7 @@ using JuiceAutomatMachine.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace JuiceAutomatMachine.Controllers
-{
-     
+{   
     public class JuicesController : Controller
     {
         private readonly JuiceDbContext _context;
@@ -38,33 +37,6 @@ namespace JuiceAutomatMachine.Controllers
         {
             if (model == null) return BadRequest();
             var juices = JsonConvert.DeserializeObject<Juice[]>(model.ToString());
-            bool needToSave = false;
-
-            if (_context.Juices.Count() > juices.Length)
-            {
-                for (int i = 0; i < _context.Juices.Count(); i++)
-                {
-                    IEnumerable<Juice> exists = juices.Where(j => j.JuiceId == _context.Juices.ElementAt(i).JuiceId);
-                    if (exists.Any()) continue;
-                    _context.Juices.Remove(_context.Juices.ElementAt(i));
-                    needToSave = true;
-                }
-                if (needToSave) _context.SaveChangesAsync();
-            }
-
-            if (_context.Juices.Count() < juices.Length)
-            {
-                for (int i = 0; i < juices.Length; i++)
-                {
-                    IEnumerable<Juice> exists = _context.Juices.Where(j => j.JuiceId == juices[i].JuiceId);
-                    if (exists.Any()) continue;
-                    _context.Juices.Add(juices[i]);
-                    needToSave = true;
-                }
-                if (needToSave) _context.SaveChangesAsync();
-            }
-
-            needToSave = false;
 
             for (int i = 0; i < _context.Juices.Count(); i++)
             {                            
@@ -89,3 +61,26 @@ namespace JuiceAutomatMachine.Controllers
 
     }
 }
+#region add-delete-juice
+/*if (_context.Juices.Count() > juices.Length)
+    {
+        for (int i = 0; i < _context.Juices.Count(); i++)
+        {
+            IEnumerable<Juice> exists = juices.Where(j => j.JuiceId == _context.Juices.ElementAt(i).JuiceId);
+            if (exists.Any()) continue;
+            _context.Juices.Remove(_context.Juices.ElementAt(i));
+        }
+        _context.SaveChangesAsync();
+    }
+
+    if (_context.Juices.Count() < juices.Length)
+    {
+        for (int i = 0; i < juices.Length; i++)
+        {
+            IEnumerable<Juice> exists = _context.Juices.Where(j => j.JuiceId == juices[i].JuiceId);
+            if (exists.Any()) continue;
+            _context.Juices.Add(juices[i]);
+        }
+        _context.SaveChangesAsync();
+    }*/
+#endregion
