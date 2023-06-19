@@ -8,7 +8,7 @@ namespace JuiceAutomatMachine.Controllers
         [Route("[controller]")]
         public string Index()
         {
-            return "pereevet";
+            return "Juice Automat emulator test task (Backend App) started.";
         }
     }
 }

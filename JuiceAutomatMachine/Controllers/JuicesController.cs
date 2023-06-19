@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using JuiceAutomatMachine.Models;
 using Newtonsoft.Json;
 using JuiceAutomatMachine.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace JuiceAutomatMachine.Controllers
 {
@@ -67,11 +68,19 @@ namespace JuiceAutomatMachine.Controllers
 
             for (int i = 0; i < _context.Juices.Count(); i++)
             {                            
-                if (_context.Juices.OrderBy(j => j.JuiceId).ElementAt(i).Equals(juices.OrderBy(j => j.JuiceId).ElementAt(i))) continue;
-                _context.Juices.Update(juices[i]);
-                needToSave = true;
+                IEnumerable<Juice> differents = _context.Juices.AsNoTracking().Where(j => j.JuiceId == juices[i].JuiceId &&
+                    (
+                    j.Title != juices[i].Title ||
+                    j.Price != juices[i].Price ||
+                    j.Rest != juices[i].Rest
+                    )
+                );
+                if (differents.Any())
+                {
+                    _context.Entry(juices[i]).State = EntityState.Modified;
+                }             
             }
-            if (needToSave) _context.SaveChangesAsync();           
+            _context.SaveChangesAsync();           
 
             return Ok(juices);
         }
