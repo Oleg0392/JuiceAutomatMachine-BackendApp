@@ -1,6 +1,7 @@
 using JuiceAutomatMachine.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.SqlServer;
+using Microsoft.Data.SqlClient;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,7 +11,17 @@ builder.Services.AddControllers();
 builder.Services.AddCors(options => options.AddPolicy("AllowAll", p => p.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
 
 builder.Services.AddDbContext<JuiceDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+/*{
+    SqlConnectionStringBuilder connBuilder = new(builder.Configuration.GetConnectionString("DefaultConnection"));
+    connBuilder.AttachDBFilename = "AppData/MSDBData.mdf";
+    options.UseSqlServer(connBuilder.ConnectionString);
+} );*/
 builder.Services.AddDbContext<CoinDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+/*{
+    SqlConnectionStringBuilder connBuilder = new (builder.Configuration.GetConnectionString("DefaultConnection"));
+    connBuilder.AttachDBFilename = "AppData/MSDBData.mdf";
+    options.UseSqlServer(connBuilder.ConnectionString);
+} );*/
 
 builder.WebHost.UseUrls("https://localhost:44321");
 
